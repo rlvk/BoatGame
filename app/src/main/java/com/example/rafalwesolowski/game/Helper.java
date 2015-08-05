@@ -1,6 +1,5 @@
 package com.example.rafalwesolowski.game;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.graphics.Bitmap;
@@ -47,9 +46,9 @@ public class Helper {
         return pixel != Color.TRANSPARENT;
     }
 
-    public static int randomXpos(MainActivity mainActivity, int boatWidth) {
+    public static int randomXpos(MainActivity mainActivity, int mineWidth) {
         Random random = new Random();
-        int randomPosition = random.nextInt(mainActivity.screenWidth - (boatWidth/2 + 10)) + boatWidth/2 + 10;
+        int randomPosition = random.nextInt(mainActivity.screenWidth - mineWidth) + 0;
         return randomPosition;
     }
 

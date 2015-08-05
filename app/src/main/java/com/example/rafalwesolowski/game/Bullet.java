@@ -13,7 +13,7 @@ public class Bullet {
     {
         posX = x;
         posY = y;
-        rate = 10;
+        rate = 16;
     }
 
     public void tick()

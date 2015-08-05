@@ -67,9 +67,7 @@ public class GameSurfaceView extends SurfaceView implements Runnable {
 
         boatBitmap = getBoatBitmap();
 
-//        bullet = new Bullet(-50, -50);
-
-        boat = new Boat(getWidth() / 2, mainActivity.screenHeight - (boatBitmap.getHeight() + 50));
+        boat = new Boat(getWidth() / 2, mainActivity.screenHeight - (boatBitmap.getHeight() + 50), getContext());
 
         Bitmap backgroundBitmap = BitmapFactory.decodeResource(this.getResources(), R.drawable.background);
         background = Bitmap.createScaledBitmap(backgroundBitmap, mainActivity.screenWidth, mainActivity.screenHeight, true);
@@ -122,6 +120,44 @@ public class GameSurfaceView extends SurfaceView implements Runnable {
                 Helper.showGameOverDialog(mainActivity);
                 return;
             }
+
+            for (int bulletIndex = 0; bulletIndex < shoots.size(); bulletIndex++) {
+                if (Helper.isCollisionDetected(bulletBitmap, (int) shoots.get(bulletIndex).getX(), (int) shoots.get(bulletIndex).getY(),
+                        mine, (int) enemies.get(index).getX(), (int) enemies.get(index).getY()))
+                {
+                    shoots.remove(bulletIndex);
+                    enemies.remove(index);
+                    return;
+                }
+            }
+        }
+
+        // Update enemies position
+        //Move
+        for (int index = 0; index < enemies.size(); index++)
+        {
+            enemies.get(index).tick();
+        }
+
+        //Remove
+        for (int index = 0; index < enemies.size(); index++)
+        {
+            if (enemies.get(index).getY() > getHeight()) {
+                enemies.remove(index);
+            }
+        }
+
+        // Bullets
+        // Draw
+        for (int index = 0; index < shoots.size(); index ++) {
+            shoots.get(index).tick();
+        }
+
+        //Remove
+        for (int index = 0; index < shoots.size(); index ++) {
+            if (shoots.get(index).getY() < 0) {
+                shoots.remove(index);
+            }
         }
 
         // If boat is moving (the player is touching the screen)
@@ -152,33 +188,16 @@ public class GameSurfaceView extends SurfaceView implements Runnable {
             // Draw boat at boatXPosition, 200 pixels
             canvas.drawBitmap(boatBitmap, boat.getX(), boat.getY(), paint);
 
-            //Draw
+            //Draw enemies
             for (int index = 0; index < enemies.size(); index++)
             {
                 canvas.drawBitmap(mine, enemies.get(index).getX(), enemies.get(index).getY(), paint);
                 enemies.get(index).tick();
             }
 
-            //Remove
-            for (int index = 0; index < enemies.size(); index++)
-            {
-                if (enemies.get(index).getY() > canvas.getHeight()) {
-                    enemies.remove(index);
-                }
-            }
-
-            // Draw
+            // Draw bullets
             for (int index = 0; index < shoots.size(); index ++) {
-//                canvas.drawBitmap(mine, enemies.get(index).getX(), enemies.get(index).getY(), paint);
                 canvas.drawBitmap(bulletBitmap, shoots.get(index).getX(), shoots.get(index).getY(), paint);
-                shoots.get(index).tick();
-            }
-
-            //Remove
-            for (int index = 0; index < shoots.size(); index ++) {
-                if (shoots.get(index).getY() < canvas.getHeight()) {
-                    shoots.remove(index);
-                }
             }
 
             // Draw everything to the screen
@@ -207,7 +226,7 @@ public class GameSurfaceView extends SurfaceView implements Runnable {
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
-                Enemy enemy = new Enemy(Helper.randomXpos(mainActivity, boatWidth), mineYPosition);
+                Enemy enemy = new Enemy(Helper.randomXpos(mainActivity, mine.getWidth()), mineYPosition);
                 enemies.add(enemy);
             }
         }, 0, delayBetweenEnemies);
@@ -216,33 +235,27 @@ public class GameSurfaceView extends SurfaceView implements Runnable {
     @Override
     public boolean onTouchEvent(MotionEvent motionEvent) {
         float touchXPos = motionEvent.getX();
+        float touchYPos = motionEvent.getY();
 
         switch (motionEvent.getAction() & MotionEvent.ACTION_MASK) {
             case MotionEvent.ACTION_DOWN:
-                if (touchXPos > boat.getX()) {
-                    isMovingRight = true;
-                } else {
-                    isMovingRight = false;
-                }
-                if (touchXPos > (boat.getX() + boatHeight + 0) || touchXPos < (boat.getX() - 0)) {
+                if (touchXPos > (boat.getX() + boatHeight)) {
                     isMoving = true;
+                    isMovingRight = true;
+                } else if (touchXPos < boat.getX()) {
+                    isMoving = true;
+                    isMovingRight = false;
+                } else if (touchYPos < getHeight() && touchYPos > boat.getY()-10) {
+                    isMoving = false;
+                    Bullet enemy = new Bullet(touchXPos, boat.getY());
+                    shoots.add(enemy);
+
+                    boat.shoot();
                 } else {
                     isMoving = false;
-                    Bullet enemy = new Bullet(boat.getX() + boatWidth/2, boat.getY());
-                    shoots.add(enemy);
                 }
-
-                isMoving = true;
-
                 break;
             case MotionEvent.ACTION_UP:
-//                if (touchXPos > (boat.getX() + boatHeight + 0) || touchXPos < (boat.getX() - 0)) {
-////                    isMoving = true;
-//                } else {
-////                    isMoving = false;
-//                    Bullet enemy = new Bullet(boat.getX() + boatWidth/2, boat.getY());
-//                    shoots.add(enemy);
-//                }
                 isMoving = false;
                 break;
         }
