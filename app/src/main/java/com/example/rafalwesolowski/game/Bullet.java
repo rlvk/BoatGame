@@ -3,27 +3,22 @@ package com.example.rafalwesolowski.game;
 /**
  * Created by rafalwesolowski on 04/08/15.
  */
-public class Boat {
+public class Bullet {
 
     float posX;
     float posY;
-    public static float rate;
+    float rate;
 
-    public Boat(float x, float y)
+    public Bullet(float x, float y)
     {
         posX = x;
         posY = y;
-        rate = 5;
+        rate = 10;
     }
 
-    public void moveToRight()
+    public void tick()
     {
-        posX += rate;
-    }
-
-    public void moveToLeft()
-    {
-        posX -= rate;
+        posY -= rate;
     }
 
     public float getX()
@@ -34,9 +29,5 @@ public class Boat {
     public float getY()
     {
         return posY;
-    }
-
-    public void shoot() {
-
     }
 }
