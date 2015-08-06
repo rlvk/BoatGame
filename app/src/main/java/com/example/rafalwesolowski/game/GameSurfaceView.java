@@ -6,7 +6,6 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.Paint;
-import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
@@ -86,64 +85,10 @@ public class GameSurfaceView extends SurfaceView implements Runnable {
         playing = true;
     }
 
-    public GameSurfaceView(Context context, AttributeSet attrs) {
-        super(context, attrs);
-
-        mainActivity = (MainActivity)context;
-
-        ourHolder = getHolder();
-        paint = new Paint();
-
-        enemies = new ArrayList<Enemy>();
-        shoots = new ArrayList<Bullet>();
-
-        boatBitmap = getBoatBitmap();
-
-        boat = new Boat(getWidth() / 2, mainActivity.screenHeight - (boatBitmap.getHeight() + 50), getContext());
-
-        Bitmap backgroundBitmap = BitmapFactory.decodeResource(this.getResources(), R.drawable.background);
-        background = Bitmap.createScaledBitmap(backgroundBitmap, mainActivity.screenWidth, mainActivity.screenHeight, true);
-
-        mine = BitmapFactory.decodeResource(this.getResources(), R.drawable.mine);
-
-        bulletBitmap = getBulletBitmap();
-
-        enemyBoat = getEnemyBoatBitmap();
-
-        playing = true;
-    }
-
-//    public GameSurfaceView(Context context, AttributeSet attrs, int defStyle) {
-//        super(context, attrs, defStyle);
-//
-//        mainActivity = (MainActivity)context;
-//
-//        ourHolder = getHolder();
-//        paint = new Paint();
-//
-//        enemies = new ArrayList<Enemy>();
-//        shoots = new ArrayList<Bullet>();
-//
-//        boatBitmap = getBoatBitmap();
-//
-//        boat = new Boat(getWidth() / 2, mainActivity.screenHeight - (boatBitmap.getHeight() + 50), getContext());
-//
-//        Bitmap backgroundBitmap = BitmapFactory.decodeResource(this.getResources(), R.drawable.background);
-//        background = Bitmap.createScaledBitmap(backgroundBitmap, mainActivity.screenWidth, mainActivity.screenHeight, true);
-//
-//        mine = BitmapFactory.decodeResource(this.getResources(), R.drawable.mine);
-//
-//        bulletBitmap = getBulletBitmap();
-//
-//        enemyBoat = getEnemyBoatBitmap();
-//
-//        playing = true;
-//    }
-
     private Bitmap getEnemyBoatBitmap() {
         Bitmap enemyBoat = BitmapFactory.decodeResource(this.getResources(), R.drawable.enemy_boat);
         Matrix matrix = new Matrix();
-        matrix.setRotate(90);
+        matrix.setRotate(-90);
         return Bitmap.createBitmap(enemyBoat, 0, 0, enemyBoat.getWidth(), enemyBoat.getHeight(), matrix, false);
     }
 
@@ -278,6 +223,7 @@ public class GameSurfaceView extends SurfaceView implements Runnable {
         try {
             gameThread.join();
             timer.cancel();
+            gameThread = null;
         } catch (InterruptedException e) {
             Log.e("Error:", "joining thread");
         }
