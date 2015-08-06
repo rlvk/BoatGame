@@ -5,9 +5,11 @@ package com.example.rafalwesolowski.game;
  */
 public class Enemy {
 
-    float posX;
-    float posY;
-    float rate;
+    private float posX;
+    private float posY;
+    private float rate;
+
+    private boolean isMine;
 
     public Enemy(float x, float y)
     {
@@ -29,5 +31,13 @@ public class Enemy {
     public float getY()
     {
         return posY;
+    }
+
+    public boolean isMine() {
+        return isMine;
+    }
+
+    public void setIsMine(boolean isMine) {
+        this.isMine = isMine;
     }
 }
