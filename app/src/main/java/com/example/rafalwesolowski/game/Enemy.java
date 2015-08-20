@@ -15,7 +15,7 @@ public class Enemy {
     {
         posX = x;
         posY = y;
-        rate = 6;
+        rate = 5;
     }
 
     public void tick()
@@ -39,5 +39,8 @@ public class Enemy {
 
     public void setIsMine(boolean isMine) {
         this.isMine = isMine;
+        if (!isMine) {
+            rate += 2;
+        }
     }
 }

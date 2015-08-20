@@ -4,6 +4,10 @@ android {
     compileSdkVersion 22
     buildToolsVersion "22.0.1"
 
+    repositories {
+        mavenCentral()
+    }
+
     defaultConfig {
         applicationId "com.example.rafalwesolowski.game"
         minSdkVersion 15
@@ -22,4 +26,7 @@ android {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile 'com.android.support:appcompat-v7:22.2.0'
+    compile 'com.facebook.android:facebook-android-sdk:4.1.0'
+    compile project(':andEngine')
+    compile project(':andEnginePhysicsBox2DExtension')
 }

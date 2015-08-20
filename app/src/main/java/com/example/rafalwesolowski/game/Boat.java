@@ -18,7 +18,7 @@ public class Boat {
     {
         posX = x;
         posY = y;
-        rate = 5;
+        rate = 6;
 
         this.context = context;
     }

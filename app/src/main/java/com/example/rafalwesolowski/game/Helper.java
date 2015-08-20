@@ -1,17 +1,34 @@
 package com.example.rafalwesolowski.game;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Rect;
+import android.net.Uri;
+import android.text.Html;
+import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
 
+import com.facebook.share.model.ShareContent;
+import com.facebook.share.model.ShareLinkContent;
+import com.facebook.share.widget.ShareDialog;
+
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 /**
  * Created by rafalwesolowski on 04/08/15.
  */
 public class Helper {
+
+    private static final int SHARE_ON_FACEBOOK = 0;
+    private static final int RESTART = 1;
+    private static final int EXIT = 2;
 
     public static boolean isCollisionDetected(Bitmap bitmap1, int x1, int y1,
                                               Bitmap bitmap2, int x2, int y2) {
@@ -46,9 +63,14 @@ public class Helper {
         return pixel != Color.TRANSPARENT;
     }
 
-    public static int randomXpos(MainActivity mainActivity, int mineWidth) {
+    public static int randomXpos(MainActivity mainActivity, int mineWidth, List<Enemy> list) {
         Random random = new Random();
         int randomPosition = random.nextInt(mainActivity.screenWidth - mineWidth) + 0;
+        for (int i = 0; i < list.size(); i++) {
+            if ((randomPosition > list.get(i).getX() - mineWidth && randomPosition < list.get(i).getX() + mineWidth)) {
+                return -200;
+            }
+        }
         return randomPosition;
     }
 
@@ -56,23 +78,54 @@ public class Helper {
         mainActivity.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                AlertDialog.Builder alertDialog = new AlertDialog.Builder(mainActivity);
-                alertDialog.setTitle("GAME OVER");
-                alertDialog.setCancelable(false);
-                alertDialog.setPositiveButton("Play again", new DialogInterface.OnClickListener() {
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(mainActivity);
+                builder.setTitle("GAME OVER")
+                        .setCancelable(false)
+                        .setItems(R.array.game_over_options,
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        switch (which) {
+                                            case SHARE_ON_FACEBOOK:
+                                                shareOnFB(mainActivity);
+                                                break;
+                                            case RESTART:
+                                                mainActivity.gameSurfaceView.resume();
+                                                break;
+                                            case EXIT:
+                                                mainActivity.finish();
+                                                break;
+                                        }
+                                    }
+                                });
+                builder.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                     @Override
-                    public void onClick(DialogInterface dialog, int which) {
+                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                        mainActivity.gameSurfaceView.resume();
+                    }
+
+                    @Override
+                    public void onNothingSelected(AdapterView<?> parent) {
                         mainActivity.gameSurfaceView.resume();
                     }
                 });
-                alertDialog.setNegativeButton("Exit game", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        mainActivity.finish();
-                    }
-                });
-                alertDialog.show();
+//                builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
+//                    @Override
+//                    public void onDismiss(DialogInterface dialog) {
+//                        mainActivity.gameSurfaceView.resume();
+//                    }
+//                });
+                builder.create().show();
             }
         });
+    }
+
+    private static void shareOnFB(Activity activity) {
+        ShareLinkContent content = new ShareLinkContent.Builder()
+                .setContentTitle("My score was " + String.valueOf(SharedPreferencesManager.readScore(activity.getApplicationContext())))
+                .setContentDescription("Download the app and try to beat me")
+                .setContentUrl(Uri.parse("http://facebook.com"))
+                .build();
+        ShareDialog.show(activity, content);
     }
 }
