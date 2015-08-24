@@ -42,7 +42,7 @@ public final class Unescaper {
 	/**
 	 * <p>Unescapes the entities in a {@link String}.</p>
 	 *
-	 * <p>For example, if you have called addEntity(&quot;foo&quot;, 0xA1),
+	 * <p>For boatgame, if you have called addEntity(&quot;foo&quot;, 0xA1),
 	 * unescape(&quot;&amp;foo;&quot;) will return &quot;\u00A1&quot;</p>
 	 *
 	 * @param pString The {@link String} to escape.

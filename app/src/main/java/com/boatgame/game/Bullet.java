@@ -1,4 +1,6 @@
-package com.example.rafalwesolowski.game;
+package com.boatgame.game;
+
+import android.content.Context;
 
 /**
  * Created by rafalwesolowski on 04/08/15.
@@ -9,11 +11,11 @@ public class Bullet {
     float posY;
     float rate;
 
-    public Bullet(float x, float y)
+    public Bullet(float x, float y, Context context)
     {
         posX = x;
         posY = y;
-        rate = 16;
+        rate = Helper.dp2px(5, context);
     }
 
     public void tick()

@@ -5,6 +5,9 @@
     <string name="action_settings">Settings</string>
     <string name="facebook_app_id">1606159926324795</string>
 
+    <string name="parse_app_id">Nh1JtiUUkkLl6v28RyFoledwkLsRWjklqtrizjOB</string>
+    <string name="parse_client_key">TPw0HxLPwhzcfwFZ5jeA0SidK6ihvRqw1dQI7fFk</string>
+
     <string-array
         name="game_over_options">
         <item>Share on Facebook</item>

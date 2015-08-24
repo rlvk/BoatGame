@@ -1,4 +1,4 @@
-package com.example.rafalwesolowski.game;
+package com.boatgame.game;
 
 import android.content.Context;
 import android.content.SharedPreferences;

@@ -1,4 +1,4 @@
-package com.example.rafalwesolowski.game;
+package com.boatgame.game;
 
 import android.content.Context;
 import android.media.MediaPlayer;
@@ -18,7 +18,7 @@ public class Boat {
     {
         posX = x;
         posY = y;
-        rate = 6;
+        rate = Helper.dp2px(2, context);
 
         this.context = context;
     }
@@ -45,7 +45,7 @@ public class Boat {
 
     public void shoot() {
 
-        MediaPlayer mediaPlayer = MediaPlayer.create(context, R.raw.explosion);
+        MediaPlayer mediaPlayer = MediaPlayer.create(context, R.raw.gunshot);
         mediaPlayer.start();
         mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
 

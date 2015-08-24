@@ -9,7 +9,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "com.example.rafalwesolowski.game"
+        applicationId "com.boatgame"
         minSdkVersion 15
         targetSdkVersion 22
         versionCode 1
@@ -29,4 +29,8 @@ dependencies {
     compile 'com.facebook.android:facebook-android-sdk:4.1.0'
     compile project(':andEngine')
     compile project(':andEnginePhysicsBox2DExtension')
+    compile 'com.android.support:appcompat-v7:22.+'
+    compile 'com.parse.bolts:bolts-android:1.+'
+    compile fileTree(dir: 'libs', include: 'Parse-*.jar')
+    compile fileTree(dir: 'libs', include: 'ParseCrashReporting-*.jar')
 }
